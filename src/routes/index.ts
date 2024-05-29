@@ -1,9 +1,16 @@
 import { Request, Response, NextFunction, Router } from 'express';
+import log4js from "log4js";
 
 const router = Router();
+log4js.configure({
+    appenders: { dama: { type: "datefile", filename: "dama_be.log",pattern: "yyyy-MM-dd",compress: true} },
+    categories: { default: { appenders: ["dama"], level: "info" } },
+});
+
 const timeLog = (req: Request, res: Response, next: NextFunction) => {
-    const date = new Date();
-    console.log(`[${date.toLocaleDateString()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] - connect`);
+    const logger = log4js.getLogger("dama");
+    var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+    logger.info(`connection from ${ip}`);
     next();
 }
 
