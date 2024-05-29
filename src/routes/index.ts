@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router} from 'express';
-import {connectHandler} from "../controller/handler";
+import {connectHandler, sendEmailHandler} from "../controller/handler";
 import log4js from "log4js";
 
 const router = Router();
@@ -21,5 +21,8 @@ router.get("/", (req, res) => {
 
 // connect
 router.post("/connect", connectHandler);
+
+// sendemail
+router.post("/sendemail", sendEmailHandler);
 
 export default router;

@@ -4,7 +4,16 @@ import log4js from "log4js";
 export function connectHandler(req: Request, res: Response){
     const logger = log4js.getLogger("dama");
     logger.info("POST /connect");
-    console.log(req.body);
     logger.info(`Wallet Adapter Name: ${req.body.adapter}`);
+    res.json({outcome:true});
+}
+
+export function sendEmailHandler(req: Request, res: Response){
+    const logger = log4js.getLogger("dama");
+    logger.info("POST /sendemail");
+    logger.info(`Message From: ${req.body.email}`);
+    logger.info(`Message Subject: ${req.body.subject}`);
+    logger.info(`Message: ${req.body.message}`);
+    
     res.json({outcome:true});
 }
