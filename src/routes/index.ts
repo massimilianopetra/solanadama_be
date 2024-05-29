@@ -1,11 +1,9 @@
-import { Request, Response, NextFunction, Router } from 'express';
+import { Request, Response, NextFunction, Router} from 'express';
+import {connectHandler} from "../controller/handler";
 import log4js from "log4js";
 
 const router = Router();
-log4js.configure({
-    appenders: { dama: { type: "datefile", filename: "dama_be.log",pattern: "yyyy-MM-dd",compress: true} },
-    categories: { default: { appenders: ["dama"], level: "info" } },
-});
+
 
 const timeLog = (req: Request, res: Response, next: NextFunction) => {
     const logger = log4js.getLogger("dama");
@@ -14,9 +12,14 @@ const timeLog = (req: Request, res: Response, next: NextFunction) => {
     next();
 }
 
-router.use(timeLog);
+router.use(timeLog); // connection logger
+
+// root
 router.get("/", (req, res) => {
     res.send("Access denied. How about trying a Sudoku puzzle instead?");
 });
+
+// connect
+router.post("/connect", connectHandler);
 
 export default router;

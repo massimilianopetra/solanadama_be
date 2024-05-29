@@ -1,6 +1,13 @@
 import express, {Express} from "express";
-import Router from "./routes";
+import log4js from "log4js";
+import Router from "./routes/index";
+
 const HTTP_PORT = 4000;
+
+log4js.configure({
+    appenders: { dama: { type: "datefile", filename: "dama_be.log",pattern: "yyyy-MM-dd",compress: true} },
+    categories: { default: { appenders: ["dama"], level: "info" } },
+});
 
 const startServer = () => {
     const app: Express = express();
