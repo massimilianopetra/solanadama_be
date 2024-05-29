@@ -41,3 +41,6 @@ next-env.d.ts
 #log
 *.log
 /log
+
+#certificate
+*.p12
