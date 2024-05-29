@@ -40,3 +40,4 @@ next-env.d.ts
 
 #log
 *.log
+/log
