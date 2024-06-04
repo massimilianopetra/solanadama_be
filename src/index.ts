@@ -8,6 +8,9 @@ import dotenv from 'dotenv';
 
 // read .env file
 dotenv.config({ path: "../.env" });
+console.log("----------------");
+console.log(process.env)
+console.log("----------------");
 
 const HTTP_PORT = 13144;
 
