@@ -4,6 +4,10 @@ import fs from 'fs';
 import path from 'path';
 import https from 'https';
 import Router from "./routes/index";
+import dotenv from 'dotenv';
+
+// read .env file
+dotenv.config({ path: "../.env" });
 
 const HTTP_PORT = 13144;
 
