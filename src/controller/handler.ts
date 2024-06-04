@@ -28,7 +28,10 @@ export function sendEmailHandler(req: Request, res: Response) {
     pool.getConnection()
         .then(conn => {
             conn.query("INSERT INTO Mail (email,subject,message,ts,status) VALUES (?, ?, ?, ?, ?)",
-                [req.body.email, req.body.subject, req.body.message, Date.now(), "new"]).catch(err => {
+                [req.body.email, req.body.subject, req.body.message, Date.now(), "new"])
+                .then(() => {
+                    logger.info("message inserted into table mail")
+                }).catch(err => {
                     //not connected
                     logger.error("db query error");
                     logger.error(err);
