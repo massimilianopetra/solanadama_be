@@ -7,7 +7,7 @@ import Router from "./routes/index";
 import dotenv from 'dotenv';
 
 // read .env file
-dotenv.config({ path: "../.env" });
+dotenv.config();
 console.log("----------------");
 console.log(process.env)
 console.log("----------------");
