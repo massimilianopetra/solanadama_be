@@ -33,5 +33,6 @@ export function sendEmailHandler(req: Request, res: Response) {
             });
         }).catch(err => {
             //not connected
+            logger.error("db connection failed");
         });
 }
