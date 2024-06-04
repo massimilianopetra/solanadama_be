@@ -5,7 +5,7 @@ import path from 'path';
 import https from 'https';
 import Router from "./routes/index";
 
-const HTTP_PORT = 8443;
+const HTTP_PORT = 13144;
 
 log4js.configure({
     appenders: { dama: { type: "dateFile", filename: "./log/dama_be.log", pattern: "yyyy-MM-dd", compress: true } },
