@@ -56,9 +56,10 @@ export function readEmailHandler(req: Request, res: Response) {
     });
     pool.getConnection()
         .then(conn => {
-            conn.query('SELECT * from Mail where status="new";')
+            conn.query('SELECT email,subject,message from Mail where status="new";')
                 .then((rows) => {
                     console.log(rows);
+                    
                     res.json(rows);
                 }).catch(err => {
                     //not connected
