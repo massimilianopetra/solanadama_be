@@ -30,21 +30,41 @@ export function sendEmailHandler(req: Request, res: Response) {
             conn.query("INSERT INTO Mail (email,subject,message,ts,status) VALUES (?, ?, ?, ?, ?)",
                 [req.body.email, req.body.subject, req.body.message, Date.now(), "new"])
                 .then(() => {
-                    logger.info("message inserted into table mail")
+                    logger.info("Message inserted into table Mail")
                 }).catch(err => {
                     //not connected
                     logger.error("db query error");
                     logger.error(err);
                 });
+        }).catch(err => {
+            //not connected
+            logger.error("db connection failed");
+            logger.error(err);
+        });
+}
 
-            /* conn.query("SELECT * from Mail;")
+export function readEmailHandler(req: Request, res: Response) {
+    const logger = log4js.getLogger("dama");
+    logger.info("GET /reademail");
+
+    const pool = mariadb.createPool({
+        host: process.env.db_host,
+        user: process.env.db_username,
+        password: process.env.db_password,
+        database: process.env.db_database,
+        connectionLimit: 5
+    });
+    pool.getConnection()
+        .then(conn => {
+            conn.query('SELECT * from Mail where status="new";')
                 .then((rows) => {
                     console.log(rows);
+                    res.json(rows);
                 }).catch(err => {
                     //not connected
                     logger.error("db query error");
                     logger.error(err);
-                }); */
+                });
 
         }).catch(err => {
             //not connected
@@ -52,3 +72,5 @@ export function sendEmailHandler(req: Request, res: Response) {
             logger.error(err);
         });
 }
+
+
