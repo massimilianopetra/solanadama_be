@@ -18,8 +18,6 @@ export function sendEmailHandler(req: Request, res: Response) {
 
     res.json({ outcome: true });
 
-    logger.info(`Read .env ${process.env.db_host}`);
-    
     const pool = mariadb.createPool({
         host: process.env.db_host,
         user: process.env.db_username,
@@ -36,5 +34,6 @@ export function sendEmailHandler(req: Request, res: Response) {
         }).catch(err => {
             //not connected
             logger.error("db connection failed");
+            logger.error(err);
         });
 }
