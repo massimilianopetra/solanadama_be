@@ -8,11 +8,6 @@ import dotenv from 'dotenv';
 
 // read .env file
 dotenv.config();
-console.log("----------------");
-console.log(process.env)
-console.log("----------------");
-
-const HTTP_PORT = 13144;
 
 log4js.configure({
     appenders: { dama: { type: "dateFile", filename: "./log/dama_be.log", pattern: "yyyy-MM-dd", compress: true } },
@@ -30,8 +25,8 @@ const startServer = () => {
     }, app);
 
     httpsServer
-        .listen(HTTP_PORT, () => {
-            console.log(`HTTPS Server Listening on ${HTTP_PORT}`);
+        .listen(process.env.solanadama_port || 13144, () => {
+            console.log(`HTTPS Server Listening on ${process.env.solanadama_port || 13144}`);
         });
 
     /*
