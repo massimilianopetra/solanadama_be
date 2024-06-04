@@ -28,9 +28,13 @@ export function sendEmailHandler(req: Request, res: Response) {
     pool.getConnection()
         .then(conn => {
             conn.query("SELECT * from Mail;")
-            .then((rows) => {
-                console.log(rows);
-            });
+                .then((rows) => {
+                    console.log(rows);
+                }).catch(err => {
+                    //not connected
+                    logger.error("db query error");
+                    logger.error(err);
+                });
         }).catch(err => {
             //not connected
             logger.error("db connection failed");
