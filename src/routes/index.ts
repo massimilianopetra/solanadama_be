@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, Router} from 'express';
 import {connectHandler, sendEmailHandler, readEmailHandler} from "../controller/handler";
+import {sendTrasaction, sendTrasactionDevnet, confirmTrasaction, confirmTrasactiondDevnet} from "../controller/solanaHandler";
 import log4js from "log4js";
 
 const router = Router();
@@ -27,5 +28,17 @@ router.post("/sendemail", sendEmailHandler);
 
 // readdemail
 router.get("/reademail", readEmailHandler);
+
+// sendtransaction
+router.post("/sendtransaction", sendTrasaction);
+
+// sendtransactiondevnet
+router.post("/sendtransactiondevnet", sendTrasactionDevnet);
+
+// confirmtransactio
+router.post("/confirmtransactio", confirmTrasaction);
+
+// confirmtransactiodevnet
+router.post("/confirmtransactiodevnet", confirmTrasactiondDevnet);
 
 export default router;
