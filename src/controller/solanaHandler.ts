@@ -123,7 +123,8 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
 
     const connection = new Connection(clusterApiUrl("devnet"));
 
-    const txid: string = req.body.resut;
+    logger.info(req.body);
+    const txid: string = req.body.result;
 
     // txid is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txid) {
@@ -137,6 +138,7 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
             signature: txid,
         });
 
+        
         logger.info(result);
 
         res.json({ outcome: "OK" });
