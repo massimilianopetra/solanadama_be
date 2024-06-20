@@ -15,6 +15,7 @@ log4js.configure({
 });
 
 const startServer = () => {
+    const logger = log4js.getLogger("dama");
     const app: Express = express();
     app.use(express.json());
     app.use("/", Router);
@@ -27,6 +28,7 @@ const startServer = () => {
     httpsServer
         .listen(process.env.solanadama_port || 13144, () => {
             console.log(`HTTPS Server Listening on ${process.env.solanadama_port || 13144}`);
+            logger.info(`HTTPS Server Listening on ${process.env.solanadama_port || 13144}`);
         });
 
     /*
