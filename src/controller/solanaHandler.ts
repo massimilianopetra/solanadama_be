@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import log4js from "log4js";
+import mariadb from 'mariadb';
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo } from '@solana/spl-token';
 import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { createCreateMetadataAccountV3Instruction } from "@metaplex-foundation/mpl-token-metadata";
@@ -28,6 +29,34 @@ export async function sendTrasactionDevnet(req: Request, res: Response) {
         logger.info(txBS58)
         const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
+
+        const pool = mariadb.createPool({
+            host: process.env.db_host,
+            user: process.env.db_username,
+            password: process.env.db_password,
+            database: process.env.db_database,
+            connectionLimit: 5
+        });
+        pool.getConnection()
+            .then(conn => {
+                conn.query("INSERT INTO Transaction (transaction,tx_id,status,ts,network,service) VALUES (?, ?, ?, ?, ?, ?)",
+                    [txBS58, txid, "sent", Date.now(), "devnet", ""])
+                    .then(() => {
+                        logger.info("Tx inserted into table TransactionInteraction");
+                        conn.end();
+                        pool.end();
+                    }).catch(err => {
+                        logger.error("db query error");
+                        logger.error(err);
+                    });
+
+            }).catch(err => {
+                //not connected
+                logger.error("db connection failed");
+                logger.error(err);
+            });
+
+
         res.json({
             "jsonrpc": "2.0",
             "result": txid,
@@ -49,9 +78,36 @@ export async function sendTrasaction(req: Request, res: Response) {
     // txBS58 is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txBS58) {
         const txUint8Array = bs58.decode(txBS58);
- 
+        logger.info(txBS58);
         const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
+
+        const pool = mariadb.createPool({
+            host: process.env.db_host,
+            user: process.env.db_username,
+            password: process.env.db_password,
+            database: process.env.db_database,
+            connectionLimit: 5
+        });
+        pool.getConnection()
+            .then(conn => {
+                conn.query("INSERT INTO Transaction (transaction,tx_id,status,ts,network,service) VALUES (?, ?, ?, ?, ?, ?)",
+                    [txBS58, txid, "sent", Date.now(), "mainnet-beta", ""])
+                    .then(() => {
+                        logger.info("Tx inserted into table Transaction");
+                        conn.end();
+                        pool.end();
+                    }).catch(err => {
+                        logger.error("db query error");
+                        logger.error(err);
+                    });
+
+            }).catch(err => {
+                //not connected
+                logger.error("db connection failed");
+                logger.error(err);
+            });
+
         res.json({
             "jsonrpc": "2.0",
             "result": txid,
@@ -83,7 +139,7 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
         });
 
         logger.info(result);
-        
+
         res.json({ outcome: "OK" });
 
     }
