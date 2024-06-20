@@ -30,6 +30,12 @@ export async function sendTrasactionDevnet(req: Request, res: Response) {
         const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
 
+        res.json({
+            "jsonrpc": "2.0",
+            "result": txid,
+            "id": 1
+        });
+
         const pool = mariadb.createPool({
             host: process.env.db_host,
             user: process.env.db_username,
@@ -55,16 +61,9 @@ export async function sendTrasactionDevnet(req: Request, res: Response) {
                 logger.error("db connection failed");
                 logger.error(err);
             });
-
-
-        res.json({
-            "jsonrpc": "2.0",
-            "result": txid,
-            "id": 1
-        });
+    } else {
+        res.json({ outcome: "ERROR" });
     }
-
-    res.json({ outcome: "ERROR" });
 }
 
 export async function sendTrasaction(req: Request, res: Response) {
@@ -81,6 +80,12 @@ export async function sendTrasaction(req: Request, res: Response) {
         logger.info(txBS58);
         const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
+
+        res.json({
+            "jsonrpc": "2.0",
+            "result": txid,
+            "id": 1
+        });
 
         const pool = mariadb.createPool({
             host: process.env.db_host,
@@ -107,15 +112,9 @@ export async function sendTrasaction(req: Request, res: Response) {
                 logger.error("db connection failed");
                 logger.error(err);
             });
-
-        res.json({
-            "jsonrpc": "2.0",
-            "result": txid,
-            "id": 1
-        });
+    } else {
+        res.json({ outcome: "ERROR" });
     }
-
-    res.json({ outcome: "ERROR" });
 }
 
 export async function confirmTrasactiondDevnet(req: Request, res: Response) {
@@ -141,10 +140,9 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
         logger.info(result);
 
         res.json({ outcome: "OK" });
-
+    } else {
+        res.json({ outcome: "ERROR" });
     }
-
-    res.json({ outcome: "ERROR" });
 }
 
 export async function confirmTrasaction(req: Request, res: Response) {
@@ -159,9 +157,18 @@ export async function confirmTrasaction(req: Request, res: Response) {
     if (txid) {
 
         logger.info(`txid = ${txid}`);
+        const latestBlockHash = await connection.getLatestBlockhash();
+
+        const result = await connection.confirmTransaction({
+            blockhash: latestBlockHash.blockhash,
+            lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+            signature: txid,
+        });
+
+        logger.info(result);
+
         res.json({ outcome: "OK" });
-
+    } else {
+        res.json({ outcome: "ERROR" });
     }
-
-    res.json({ outcome: "ERROR" });
 }
