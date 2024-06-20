@@ -36,9 +36,9 @@ router.post("/sendtransaction", sendTrasaction);
 router.post("/sendtransactiondevnet", sendTrasactionDevnet);
 
 // confirmtransactio
-router.post("/confirmtransactio", confirmTrasaction);
+router.post("/confirmtransaction", confirmTrasaction);
 
 // confirmtransactiodevnet
-router.post("/confirmtransactiodevnet", confirmTrasactiondDevnet);
+router.post("/confirmtransactiondevnet", confirmTrasactiondDevnet);
 
 export default router;
