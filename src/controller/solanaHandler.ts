@@ -124,26 +124,29 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
     const connection = new Connection(clusterApiUrl("devnet"));
     const txid: string = req.body.result;
 
-    // txid is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txid) {
 
         logger.info(`txid = ${txid}`);
         const latestBlockHash = await connection.getLatestBlockhash();
 
-        const result = await connection.confirmTransaction({
+        await connection.confirmTransaction({
             blockhash: latestBlockHash.blockhash,
             lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
             signature: txid,
         });
 
-        
-        logger.info(result);
-        const result_2 = await connection.getSignatureStatus(txid);
-        logger.info(result_2);
 
-        res.json({ outcome: "OK" });
+        const result = await connection.getSignatureStatus(txid);
+        logger.info(result.value?.confirmationStatus);
+
+        if (result.value?.confirmationStatus) {
+            res.json({ outcome: result.value?.confirmationStatus });
+        } else {
+            res.json({ outcome: "error" });
+        }
+
     } else {
-        res.json({ outcome: "ERROR" });
+        res.json({ outcome: "error" });
     }
 }
 
@@ -154,22 +157,28 @@ export async function confirmTrasaction(req: Request, res: Response) {
     const connection = new Connection(clusterApiUrl("mainnet-beta"));
     const txid: string = req.body.result;
 
-    // txid is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txid) {
 
         logger.info(`txid = ${txid}`);
         const latestBlockHash = await connection.getLatestBlockhash();
 
-        const result = await connection.confirmTransaction({
+        await connection.confirmTransaction({
             blockhash: latestBlockHash.blockhash,
             lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
             signature: txid,
         });
 
-        logger.info(result);
 
-        res.json({ outcome: "OK" });
+        const result = await connection.getSignatureStatus(txid);
+        logger.info(result.value?.confirmationStatus);
+
+        if (result.value?.confirmationStatus) {
+            res.json({ outcome: result.value?.confirmationStatus });
+        } else {
+            res.json({ outcome: "error" });
+        }
+
     } else {
-        res.json({ outcome: "ERROR" });
+        res.json({ outcome: "error" });
     }
 }
