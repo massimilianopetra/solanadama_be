@@ -14,7 +14,7 @@ export function mintTokenHandler(req: Request, res: Response) {
 }
 
 
-export function sendTrasactionDevnet(req: Request, res: Response) {
+export async function sendTrasactionDevnet(req: Request, res: Response) {
     const logger = log4js.getLogger("dama");
     logger.info("POST /sendtransactiondevnet");
 
@@ -25,7 +25,8 @@ export function sendTrasactionDevnet(req: Request, res: Response) {
     // txBS58 is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txBS58) {
         const txUint8Array = bs58.decode(txBS58);
-        const txid = connection.sendRawTransaction(txUint8Array);
+        logger.info(txBS58)
+        const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
         res.json({
             "jsonrpc": "2.0",
@@ -48,6 +49,7 @@ export async function sendTrasaction(req: Request, res: Response) {
     // txBS58 is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txBS58) {
         const txUint8Array = bs58.decode(txBS58);
+ 
         const txid = await connection.sendRawTransaction(txUint8Array);
         logger.info(`txid = ${txid}`);
         res.json({
