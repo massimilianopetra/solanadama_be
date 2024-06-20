@@ -17,7 +17,7 @@ start)
 
         export COMMAND="npm run dev"
         echo $COMMAND
-        nohup $COMMAND 2>&1 1>>$HOME/logs/nohup.out &
+        nohup $COMMAND 2>&1 1>>$HOME/log/nohup.out &
         echo $! > $PID_FILE
 
         if [ -f $PID_FILE ]; then
