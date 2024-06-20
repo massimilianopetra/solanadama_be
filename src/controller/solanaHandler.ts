@@ -122,8 +122,6 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
     logger.info("POST /confirmtransactiondevnet");
 
     const connection = new Connection(clusterApiUrl("devnet"));
-
-    logger.info(req.body);
     const txid: string = req.body.result;
 
     // txid is truthy strValue was non-empty string, true, 42, Infinity, [],
@@ -140,6 +138,8 @@ export async function confirmTrasactiondDevnet(req: Request, res: Response) {
 
         
         logger.info(result);
+        const result_2 = await connection.getSignatureStatus(txid);
+        logger.info(result_2);
 
         res.json({ outcome: "OK" });
     } else {
@@ -152,8 +152,7 @@ export async function confirmTrasaction(req: Request, res: Response) {
     logger.info("POST /confirmtransaction");
 
     const connection = new Connection(clusterApiUrl("mainnet-beta"));
-
-    const txid: string = req.body.resut;
+    const txid: string = req.body.result;
 
     // txid is truthy strValue was non-empty string, true, 42, Infinity, [],
     if (txid) {
