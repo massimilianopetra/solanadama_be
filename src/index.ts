@@ -9,8 +9,10 @@ import dotenv from 'dotenv';
 // read .env file
 dotenv.config();
 
+const logfile = process.argv.slice(2)[0]+"/log/dama_be.log"
+
 log4js.configure({
-    appenders: { dama: { type: "dateFile", filename: "./log/dama_be.log", pattern: "yyyy-MM-dd", compress: true } },
+    appenders: { dama: { type: "dateFile", filename: logfile, pattern: "yyyy-MM-dd", compress: true } },
     categories: { default: { appenders: ["dama"], level: "info" } },
 });
 
@@ -39,7 +41,6 @@ const startServer = () => {
 
 (() => {
     try {
-        console.log(process.argv.slice(2))
         console.log("Starting HTTP Server ...");
         startServer();
         console.log("HTTP Server is ready");
