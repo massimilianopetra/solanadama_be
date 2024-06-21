@@ -7,9 +7,9 @@ import Router from "./routes/index";
 import dotenv from 'dotenv';
 
 // read .env file
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const logfile = process.argv.slice(2)[0]+"/log/dama_be.log"
+const logfile = path.resolve(__dirname, '../log/dama_be.log')
 
 log4js.configure({
     appenders: { dama: { type: "dateFile", filename: logfile, pattern: "yyyy-MM-dd", compress: true } },

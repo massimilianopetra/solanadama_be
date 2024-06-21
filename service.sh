@@ -15,7 +15,7 @@ start)
                 fi
         fi
 
-        export COMMAND="ts-node "$HOME"/src/index.ts "$HOME
+        export COMMAND="ts-node "$HOME"/src/index.ts"
         echo $COMMAND
         nohup $COMMAND 2>&1 1>>$HOME/log/nohup.out &
         echo $! > $PID_FILE
