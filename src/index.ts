@@ -27,7 +27,6 @@ const startServer = () => {
 
     httpsServer
         .listen(process.env.solanadama_port || 13144, () => {
-            console.log(`HTTPS Server Listening on ${process.env.solanadama_port || 13144}`);
             logger.info(`HTTPS Server Listening on ${process.env.solanadama_port || 13144}`);
         });
 
@@ -40,6 +39,7 @@ const startServer = () => {
 
 (() => {
     try {
+        console.log(process.argv.slice(2))
         console.log("Starting HTTP Server ...");
         startServer();
         console.log("HTTP Server is ready");
