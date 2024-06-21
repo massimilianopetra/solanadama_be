@@ -10,12 +10,12 @@ start)
                 PIDVAL=`cat $PID_FILE`
                 RESULT=`ps -p $PIDVAL | grep $PIDVAL`
                 if [  ! -z "$RESULT" ]; then
-                        echo "Solanadama backend is running with PID " $PIDVAL
+                        echo "Solanadama backend is already running with PID " $PIDVAL
                         exit 1
                 fi
         fi
 
-        export COMMAND="npm run dev"
+        export COMMAND="ts-node src/index.ts"
         echo $COMMAND
         nohup $COMMAND 2>&1 1>>$HOME/log/nohup.out &
         echo $! > $PID_FILE
