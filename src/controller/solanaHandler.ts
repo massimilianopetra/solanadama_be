@@ -96,7 +96,7 @@ export async function sendTrasaction(req: Request, res: Response) {
                     run = 0;
                 }
             } catch (error) {
-                await sleep(400);
+                await sleep(4000);
             }
         }
 
